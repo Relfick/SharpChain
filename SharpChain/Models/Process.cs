@@ -6,7 +6,7 @@ public class Process
 {
     private const string Host = "localhost";
     private readonly Dictionary<int, string> _peerUrls;
-    private readonly HttpClient _httpClient = new HttpClient();
+    private readonly HttpClient _httpClient = new();
 
     private int Id { get; set; }
     private int Port { get; set; }
