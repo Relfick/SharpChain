@@ -1,0 +1,31 @@
+services:
+  node1:
+    build:
+      dockerfile: ./SharpChain/Dockerfile
+    network_mode: "host"
+    command: "5001"
+    environment:
+      FIRST_PROCESS_PORT: 5001
+      SECOND_PROCESS_PORT: 5002
+      THIRD_PROCESS_PORT: 5003
+    depends_on:
+      - node2
+      - node3
+  node2:
+    build:
+      dockerfile: ./SharpChain/Dockerfile
+    network_mode: "host"
+    command: "5002"
+    environment:
+      FIRST_PROCESS_PORT: 5001
+      SECOND_PROCESS_PORT: 5002
+      THIRD_PROCESS_PORT: 5003
+  node3:
+    build:
+      dockerfile: ./SharpChain/Dockerfile
+    network_mode: "host"
+    command: "5003"
+    environment:
+      FIRST_PROCESS_PORT: 5001
+      SECOND_PROCESS_PORT: 5002
+      THIRD_PROCESS_PORT: 5003
