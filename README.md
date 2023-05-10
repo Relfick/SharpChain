@@ -1,4 +1,7 @@
 # Blockchain in .NET
+
+![Push to Docker Hub](https://github.com/relfick/SharpChain/actions/workflows/dockerhub.yml/badge.svg?branch=master)
+
 Simple blockchain implementation for [Network Programming course](https://github.com/SemenMartynov/Software-Engineering-2022/blob/main/NetworkProgrammingTask.md)
 
 ## Run
