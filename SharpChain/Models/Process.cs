@@ -4,20 +4,21 @@ using SharpChain.Models;
 
 public class Process
 {
-    private const string Host = "localhost";
+    private const int Port = 5010;
+    
+    private readonly string _host;
     private readonly Dictionary<int, string> _peerUrls;
     private readonly HttpClient _httpClient = new();
 
     private int Id { get; set; }
-    private int Port { get; set; }
     private bool Received { get; set; }
     private Node Node { get; set; }
     
-    public Process(int port)
+    public Process()
     {
-        Id = port % 10;
-        Port = port;
-        _peerUrls = GetPeerUrls(port);
+        _host = GetHostName();
+        Id = int.Parse(_host.Last().ToString());
+        _peerUrls = GetPeerUrls(Id);
         Received = false;
         Node = new Node(Id);
     }
@@ -25,7 +26,7 @@ public class Process
     public void Start()
     {
         var builder = WebApplication.CreateBuilder();
-        builder.WebHost.UseUrls($"http://{Host}:{Port}/");
+        builder.WebHost.UseUrls($"http://{_host}:{Port}/");
         var app = builder.Build();
 
         app.MapPost("/", NewBlockHandler);
@@ -141,30 +142,34 @@ public class Process
         throw new NullReferenceException();
     }
 
-    private static Dictionary<int, string> GetPeerUrls(int currPort)
+    private Dictionary<int, string> GetPeerUrls(int currId)
     {
-        var port1 = int.Parse(Environment.GetEnvironmentVariable("FIRST_PROCESS_PORT")!);
-        var port2 = int.Parse(Environment.GetEnvironmentVariable("SECOND_PROCESS_PORT")!);
-        var port3 = int.Parse(Environment.GetEnvironmentVariable("THIRD_PROCESS_PORT")!);
+        string[] peerHosts = Environment.GetEnvironmentVariable("PEER_ADDRESSES")!.Split(',');
         
         var peerUrls = new Dictionary<int, string>();
         
-        if (currPort == port1)
+        if (currId == 1)
         {
-            peerUrls[2] = $"http://{Host}:{port2}/";
-            peerUrls[3] = $"http://{Host}:{port3}/";
+            peerUrls[2] = $"http://{peerHosts[0]}:{Port}/";
+            peerUrls[3] = $"http://{peerHosts[1]}:{Port}/";
         }
-        else if (currPort == port2)
+        else if (currId == 2)
         {
-            peerUrls[1] = $"http://{Host}:{port1}/";
-            peerUrls[3] = $"http://{Host}:{port3}/"; 
+            peerUrls[1] = $"http://{peerHosts[0]}:{Port}/";
+            peerUrls[3] = $"http://{peerHosts[1]}:{Port}/";
         }
         else
         {
-            peerUrls[1] = $"http://{Host}:{port1}/";
-            peerUrls[2] = $"http://{Host}:{port2}/"; 
+            peerUrls[1] = $"http://{peerHosts[0]}:{Port}/";
+            peerUrls[2] = $"http://{peerHosts[1]}:{Port}/";
         }
 
         return peerUrls;
+    }
+
+    private string GetHostName()
+    {
+        string currHostName = Environment.GetEnvironmentVariable("NODE_ADDRESS")!;
+        return currHostName;
     }
 }

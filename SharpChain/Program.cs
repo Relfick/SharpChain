@@ -4,11 +4,10 @@ namespace SharpChain;
 
 public static class Program
 {
-    public static Task Main(string[] args)
+    public static Task Main()
     {
-        int port = int.Parse(args[0]);
+        Process process = new Process();
         
-        Process process = new Process(port);
         process.Start();
         return Task.CompletedTask;
     }
