@@ -3,8 +3,7 @@ services:
     hostname: node1
     networks:
       - blockchain
-    build:
-      dockerfile: ./SharpChain/Dockerfile
+    image: relfick/sharp-chain
     environment:
       NODE_ADDRESS: node1
       PEER_ADDRESSES: node2,node3
@@ -15,8 +14,7 @@ services:
     hostname: node2
     networks:
       - blockchain
-    build:
-      dockerfile: ./SharpChain/Dockerfile
+    image: relfick/sharp-chain
     environment:
       NODE_ADDRESS: node2
       PEER_ADDRESSES: node1,node3
@@ -24,8 +22,7 @@ services:
     hostname: node3
     networks:
       - blockchain
-    build:
-      dockerfile: ./SharpChain/Dockerfile
+    image: relfick/sharp-chain
     environment:
       NODE_ADDRESS: node3
       PEER_ADDRESSES: node2,node1
