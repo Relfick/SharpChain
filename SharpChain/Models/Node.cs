@@ -87,10 +87,9 @@ public class Node
         // If handle next block
         if (block.Index == Chain.Count)
         {
-            var lastBlock = Chain.Last!.Value;
             var newBlockHash = GetHash(block.Index, block.PrevHash, block.Data, block.Nonce);
             
-            if (block.PrevHash == lastBlock.Hash && block.Hash == newBlockHash)
+            if (block.Hash == newBlockHash)
             {
                 Chain.AddLast(block);
                 Console.WriteLine($"Received block from Node {processId}: {blockInfo}");
@@ -111,8 +110,24 @@ public class Node
 
     public void SetChain(LinkedList<Block> newChain, int processId)
     {
-        Chain = newChain;
+        if (ChainIsValid(newChain))
+        {
+            Chain = newChain;
+        }
+
         Console.WriteLine($"Got full chain from Node {processId}");
+    }
+    
+    private bool ChainIsValid(LinkedList<Block> chain)
+    {
+        foreach (var block in chain)
+        {
+            var blockHash = GetHash(block.Index, block.PrevHash, block.Data, block.Nonce);
+            if (blockHash != block.Hash)
+                return false;
+        }
+
+        return true;
     }
     
     public string GetBlockInfo(Block block)
