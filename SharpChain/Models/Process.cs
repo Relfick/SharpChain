@@ -1,7 +1,5 @@
 namespace SharpChain.Models;
 
-using SharpChain.Models;
-
 public class Process
 {
     private const int Port = 5010;
@@ -69,7 +67,7 @@ public class Process
                 }
             }
             
-            Thread.Sleep(3000);
+            Thread.Sleep(2000);
         }
     }
 
@@ -126,7 +124,7 @@ public class Process
             Node.SetChain(newChain, processId);
         }
         
-        Thread.Sleep(2000);
+        Thread.Sleep(1000);
         Received = false;
     }
 
